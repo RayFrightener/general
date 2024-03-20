@@ -26,7 +26,7 @@ class TicTacToe
   end
 
   def switch_player
-    @current_player = current_player == 'X' ? 'O' : 'X'
+    @current_player = @current_player == 'X' ? 'O' : 'X'
   end
 
   def check_winner
@@ -42,6 +42,38 @@ class TicTacToe
   end
 
   def board_full?
-    @board.all? { |cell| cell.is.a?(String) }
+    @board.all? { |cell| cell.is_a?(String) }
   end
 end
+
+#game loop
+game = TicTacToe.new
+
+loop do
+  system("clear") || system("cls")
+  game.display_board
+
+  puts "Player #{@current_player}, enter your move (1-9):"
+  position = gets.chomp.to_i
+
+  if position.between?(1,9)
+    game.make_move(position)
+
+    winner = game.check_winner
+    if winner
+      system("clear") || system("cls")
+      game.display_board
+      puts "Player #{winner} wins!"
+      break
+    elsif game.board_full?
+    system("clear") || system("cls")
+    game.display_board
+    puts "It's a draw!"
+    break
+    end 
+    next_player = (@current_player == 'X') ? 'O' : 'X'
+    puts "Player #{next_player}, make a move."
+  else 
+    puts "Invalid input. Enter a number between  1 and 9."
+  end 
+end 
